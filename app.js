@@ -70,7 +70,7 @@ var UIController = (function () {
       return {
         type: document.querySelector(DOMStrings.inputType).value, //get inc or exp
         description: document.querySelector(DOMStrings.inputDescription).value,
-        value: document.querySelector(DOMStrings.inputValue).value
+        value: parseFloat(document.querySelector(DOMStrings.inputValue).value)
       };
 
     },
@@ -102,8 +102,7 @@ var UIController = (function () {
 
     clearFields: function () {
       var fields, fieldsArr;
-      fields = document.querySelectorAll(DOMStrings.inputDescription +', ' + DOMStrings.inputValue);
-      console.log(fields);
+      fields = document.querySelectorAll(DOMStrings.inputDescription + ', ' + DOMStrings.inputValue);
       fieldsArr = Array.prototype.slice.call(fields);
       fieldsArr.forEach(function (current, index, array) {
         current.value = '';
@@ -133,18 +132,24 @@ var controller = (function (budgetCtrl, UICtrl) {
     });
   }
 
+  var updateBudget = function () {
 
+  }
 
   var ctrlAddItem = function () {
     var input, newItem;
     input = UICtrl.getInput();
 
-    newItem = budgetCtrl.addItem(input.type, input.description, input.value);
+    if (input.description !== "" && !isNaN(input.value) && input.value > 0) {
 
-    UICtrl.addListItem(newItem, input.type);
+      newItem = budgetCtrl.addItem(input.type, input.description, input.value);
 
-    UICtrl.clearFields();
+      UICtrl.addListItem(newItem, input.type);
 
+      UICtrl.clearFields();
+
+      updateBudget();
+    }
 
   };
 
